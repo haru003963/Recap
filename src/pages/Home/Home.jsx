@@ -5,7 +5,7 @@ import Header from "@/Header";
 import CardComp from "./CardComp";
 
 const Home = () => {
-  // 1. 本来はここがAmazonやSHEINのデータになります
+  // ダミーデータ
   const data = [
     {
       id: 1,
@@ -23,12 +23,14 @@ const Home = () => {
       date: "2026/01/27",
     },
   ];
-  // 2. 「現在選択中のカテゴリ」を管理するState（初期値は "全て"）
+  // 「現在選択中のカテゴリ」を管理するState（初期値は "全て"）
   const [selectedCategory, setSelectedCategory] = useState("全て");
 
+  // カテゴリだけを取ってきて配列で管理
   const categories = ["全て", ...new Set(data.map((item) => item.category))];
 
-  // 3. 選択されたカテゴリに基づいてデータを絞り込む
+  // 表示するデータを選定するところ
+  // 選択中のカテゴリが「全て」ならdataを、それ以外ならdataの中のカテゴリと一致するものだけ取り出す
   const filteredData =
     selectedCategory === "全て"
       ? data
@@ -36,15 +38,15 @@ const Home = () => {
 
   return (
     <Box minH="100vh" bg="gray.50">
-      {/* Headerに、現在の選択状態と、変更するための関数を渡す */}
+      {/* Headerに、現在の選択状態と、カテゴリ配列、「今、どのカテゴリが選ばれているか」を書き換えるための専用リモコンを渡す */}
       <Header
         categories={categories}
         selectedCategory={selectedCategory}
-        onCategoryChange={setSelectedCategory}
+        setSelectedCategory={setSelectedCategory}
       />
 
       <Box p={4} pb="100px">
-        {/* 元の data ではなく、絞り込んだ filteredData を使う */}
+        {/* 選定されたデータの中身を1つずつ取り出してCardCompに渡す */}
         {filteredData.map((item) => (
           <CardComp
             key={item.id}
@@ -56,7 +58,7 @@ const Home = () => {
         ))}
       </Box>
 
-      {/* 3. デザイン案の「＋」ボタン */}
+      {/*「＋」ボタン */}
       <IconButton
         icon={<AddIcon />}
         colorScheme="orange"

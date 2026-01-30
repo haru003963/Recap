@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, Button, HStack, VStack } from "@chakra-ui/react";
 
-const Header = ({ categories, selectedCategory, onCategoryChange }) => {
+const Header = ({ categories, selectedCategory, setSelectedCategory }) => {
   return (
     <VStack
       p={4}
@@ -16,6 +16,7 @@ const Header = ({ categories, selectedCategory, onCategoryChange }) => {
         Recap
       </Text>
       <HStack spacing={2} overflowX="auto" width="100%" py={1}>
+        {/* 受け取ったカテゴリ一覧から1つずつ取り出す */}
         {categories.map((cat) => (
           <Button
             key={cat}
@@ -25,7 +26,7 @@ const Header = ({ categories, selectedCategory, onCategoryChange }) => {
             variant={selectedCategory === cat ? "solid" : "outline"}
             colorScheme="orange"
             // クリックされたら、HomeのselectedCategoryを更新する
-            onClick={() => onCategoryChange(cat)}
+            onClick={() => setSelectedCategory(cat)}
           >
             {cat}
           </Button>
