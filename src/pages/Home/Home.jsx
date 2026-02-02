@@ -3,6 +3,7 @@ import { Box, IconButton } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import Header from "@/Header";
 import CardComp from "./CardComp";
+import PlusModal from "./PlusModal";
 
 const Home = () => {
   // ダミーデータ
@@ -25,6 +26,8 @@ const Home = () => {
   ];
   // 「現在選択中のカテゴリ」を管理するState（初期値は "全て"）
   const [selectedCategory, setSelectedCategory] = useState("全て");
+  // モーダル管理
+  const [isOpen, setIsOpen] = useState(false);
 
   // カテゴリだけを取ってきて配列で管理
   const categories = ["全て", ...new Set(data.map((item) => item.category))];
@@ -68,8 +71,9 @@ const Home = () => {
         bottom="100px"
         right="20px"
         shadow="2xl"
-        onClick={() => alert("追加機能はこれから実装！")}
+        onClick={() => setIsOpen(true)}
       />
+      <PlusModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </Box>
   );
 };
