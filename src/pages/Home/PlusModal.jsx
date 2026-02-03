@@ -18,8 +18,32 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 
-const PlusModal = ({ isOpen, setIsOpen, categories }) => {
-  const [newItemCategory, setNewItemCategory] = useState();
+const PlusModal = ({ isOpen, setIsOpen, categories, addPurchase }) => {
+  const [itemName, setItemName] = useState(""); // 商品名の記憶
+  const [itemPrice, setItemPrice] = useState(""); // 金額の記憶
+  const [itemDate, setItemDate] = useState(""); // 日付の記憶
+  const [newItemCategory, setNewItemCategory] = useState(""); // 今選択されているカテゴリ
+
+  const handleSave = () => {
+    // ① 4つのバラバラなStateを1つの「モノ」にまとめる
+    const newPurchase = {
+      id: Date.now(),
+      name: itemName,
+      price: itemPrice,
+      category: newItemCategory,
+      date: itemDate,
+    };
+
+    // ② 親（Home.jsx）にこの新しいデータを渡す
+    addPurchase(newPurchase);
+
+    // ③ 入力欄を空っぽに戻す
+    setItemName("");
+    setItemPrice("");
+    setItemDate("");
+    setNewItemCategory("");
+  };
+
   return (
     // (Home.jsx の return 文の最後の </Box> の直前などに入れる)
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -31,17 +55,30 @@ const PlusModal = ({ isOpen, setIsOpen, categories }) => {
           <VStack spacing={4}>
             <FormControl>
               <FormLabel>商品名</FormLabel>
-              <Input placeholder="商品名" />
+              <Input
+                placeholder="商品名"
+                value={itemName} // Stateを表示
+                onChange={(e) => setItemName(e.target.value)} // 打ったらStateに保存
+              />
             </FormControl>
 
             <FormControl>
               <FormLabel>金額</FormLabel>
-              <Input type="number" placeholder="1200" />
+              <Input
+                type="number"
+                placeholder="1200"
+                value={itemPrice}
+                onChange={(e) => setItemPrice(e.target.value)}
+              />
             </FormControl>
 
             <FormControl>
               <FormLabel>日付</FormLabel>
-              <Input type="date" />
+              <Input
+                type="date"
+                value={itemDate}
+                onChange={(e) => setItemDate(e.target.value)}
+              />
             </FormControl>
 
             <FormControl>
@@ -84,7 +121,7 @@ const PlusModal = ({ isOpen, setIsOpen, categories }) => {
           <Button
             colorScheme="orange"
             onClick={() => {
-              alert("保存機能はこれから！");
+              handleSave();
               setIsOpen(false);
             }}
           >
