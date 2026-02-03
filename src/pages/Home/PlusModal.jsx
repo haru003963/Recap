@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -13,9 +13,13 @@ import {
   Select,
   Button,
   VStack,
+  IconButton,
+  HStack,
 } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 
-const PlusModal = ({ isOpen, setIsOpen }) => {
+const PlusModal = ({ isOpen, setIsOpen, categories }) => {
+  const [newItemCategory, setNewItemCategory] = useState();
   return (
     // (Home.jsx の return 文の最後の </Box> の直前などに入れる)
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -36,12 +40,39 @@ const PlusModal = ({ isOpen, setIsOpen }) => {
             </FormControl>
 
             <FormControl>
+              <FormLabel>日付</FormLabel>
+              <Input type="date" />
+            </FormControl>
+
+            <FormControl>
               <FormLabel>カテゴリ</FormLabel>
-              <Select placeholder="カテゴリを選択">
-                <option value="Amazon">Amazon</option>
-                <option value="SHEIN">SHEIN</option>
-                <option value="その他">その他</option>
-              </Select>
+              <HStack>
+                <Select
+                  placeholder="カテゴリを選択"
+                  value={newItemCategory}
+                  onChange={(e) => setNewItemCategory(e.target.value)}
+                >
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </Select>
+
+                {/* カテゴリを新しく作るためのボタン */}
+                <IconButton
+                  aria-label="Add category"
+                  icon={<AddIcon />}
+                  variant="outline"
+                  onClick={() => {
+                    const newCat = prompt("新しいカテゴリ名を入力してください");
+                    if (newCat) {
+                      // ここにカテゴリリストを更新する処理を後で書きます
+                      alert(`${newCat} を追加する機能を作ります！`);
+                    }
+                  }}
+                />
+              </HStack>
             </FormControl>
           </VStack>
         </ModalBody>

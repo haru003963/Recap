@@ -73,7 +73,7 @@ const Home = () => {
         shadow="2xl"
         onClick={() => setIsOpen(true)}
       />
-      <PlusModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <PlusModal isOpen={isOpen} setIsOpen={setIsOpen} categories={categories} />
     </Box>
   );
 };
