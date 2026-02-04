@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 
-const PlusModal = ({ isOpen, setIsOpen, categories, addPurchase }) => {
+const PlusModal = ({ isOpen, setIsOpen, categories, addPurchase, handleAddCategory }) => {
   const [itemName, setItemName] = useState(""); // 商品名の記憶
   const [itemPrice, setItemPrice] = useState(""); // 金額の記憶
   const [itemDate, setItemDate] = useState(""); // 日付の記憶
@@ -102,10 +102,15 @@ const PlusModal = ({ isOpen, setIsOpen, categories, addPurchase }) => {
                   icon={<AddIcon />}
                   variant="outline"
                   onClick={() => {
-                    const newCat = prompt("新しいカテゴリ名を入力してください");
-                    if (newCat) {
-                      // ここにカテゴリリストを更新する処理を後で書きます
-                      alert(`${newCat} を追加する機能を作ります！`);
+                    // ① ユーザーにカテゴリ名を入力してもらう
+                    const name = prompt("新規カテゴリ追加");
+
+                    // ② もし名前が入力されたら、親にその名前を伝える
+                    if (name) {
+                      // ここで親（Home.jsx）から受け取った「カテゴリ追加用関数」を実行する
+                      handleAddCategory(name);
+                      // 「今選択されているカテゴリ」のStateも、この名前に書き換える！
+                      setNewItemCategory(name);
                     }
                   }}
                 />

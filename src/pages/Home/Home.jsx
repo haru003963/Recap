@@ -10,18 +10,10 @@ const Home = () => {
   const data = [
     {
       id: 1,
-      name: "ワイヤレスイヤホン",
+      name: "ダミー",
       price: "5,800",
       category: "Amazon",
-      date: "2026/01/29",
-    },
-    { id: 2, name: "冬物ニット", price: "3,200", category: "SHEIN", date: "2026/01/28" },
-    {
-      id: 3,
-      name: "スマホケース",
-      price: "1,500",
-      category: "Amazon",
-      date: "2026/01/27",
+      date: "2026-01-29",
     },
   ];
 
@@ -29,11 +21,19 @@ const Home = () => {
   const [list, setList] = useState(data);
   // 「現在選択中のカテゴリ」を管理するState（初期値は "全て"）
   const [selectedCategory, setSelectedCategory] = useState("全て");
+  // 追加されたカテゴリ
+  const [addedCategories, setAddedCategories] = useState([]);
   // モーダル管理
   const [isOpen, setIsOpen] = useState(false);
 
   // カテゴリだけを取ってきて配列で管理
-  const categories = ["全て", ...new Set(list.map((item) => item.category))];
+  const allCategories = [
+    ...list.map((item) => item.category), // 1. 支出データにあるカテゴリ
+    ...addedCategories, // 2. 手動で追加したカテゴリ
+  ];
+
+  // 3. 全てを合体させてから、Set で重複を削除し、最後に「全て」を先頭に添える
+  const categories = ["全て", ...new Set(allCategories.filter((cat) => cat))];
 
   // 表示するデータを選定するところ
   // 選択中のカテゴリが「全て」ならdataを、それ以外ならdataの中のカテゴリと一致するものだけ取り出す
@@ -46,6 +46,12 @@ const Home = () => {
   const addPurchase = (newPurchase) => {
     setList([...list, newPurchase]); // 今のリストを広げて、新しいのを追加した「新しい配列」で上書き
     setIsOpen(false); // 保存が終わったらモーダルを閉じる
+  };
+
+  // 新規カテゴリ追加
+  const handleAddCategory = (newCat) => {
+    // 今までの配列 (...addedCategories) を広げて、新しいのを追加
+    setAddedCategories([...addedCategories, newCat]);
   };
 
   return (
@@ -87,6 +93,7 @@ const Home = () => {
         setIsOpen={setIsOpen}
         categories={categories}
         addPurchase={addPurchase}
+        handleAddCategory={handleAddCategory}
       />
     </Box>
   );
